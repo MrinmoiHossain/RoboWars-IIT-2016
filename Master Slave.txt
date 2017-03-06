@@ -1,0 +1,62 @@
+****For slave
+adDRESS:
+98d3,34,908a7b
+
+
+AT
+AT+ORGL(reset to factory mode)
+AT+UART(to check if the bqudrates are equal)
+AT+UART=9600,0,0
+AT+ADDR
+
+***FOR MASTER
+AT
+AT+ORGL
+AT+UART
+AT+UART=9600,0,0
+AT+ROLE=1
+AT+BIND=address of slave(colon replaced by comma)
+
+
+
+Arduino           HC 05
+10                TX
+11                RX
+GND               GND
+5v                VCC
+
+For entering AT Command mode, press the button on and then remove the usb cable and reconnect.
+For HC 05 not having button, for that Key/EN pin should be connected to 5v. Then disconnect usb cable and reconnect. 
+
+
+
+
+
+
+#include <SoftwareSerial.h>
+
+SoftwareSerial mySerial(10, 11); // RX, TX
+
+void setup() {
+  // Open serial communications and wait for port to open:
+  Serial.begin(9600);
+  //while (!Serial) {
+  //  ; // wait for serial port to connect. Needed for native USB port only
+  //}
+
+
+  //Serial.println("Goodnight moon!");
+
+  // set the data rate for the SoftwareSerial port
+  mySerial.begin(38400);
+  //mySerial.println("Hello, world?");
+}
+
+void loop() { // run over and over
+  if (mySerial.available()) {
+    Serial.write(mySerial.read());
+  }
+  if (Serial.available()) {
+    mySerial.write(Serial.read());
+  }
+}
